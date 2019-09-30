@@ -6,14 +6,17 @@ public class bulletroll : MonoBehaviour
 	Vector2 prevrot;
 	[SerializeField] Transform[] t;
 	float pan;
+	Vector4 camrot;
 	[SerializeField] Texture2D[] d;
 	[SerializeField] GameObject goodbullet;
 	[SerializeField] Image mouse;
 	[SerializeField] Sprite[] mice;
+	[SerializeField] [Range(0.0f, 1.0f)] float influence;
 
 	void Start()
 	{
 		prevrot = new Vector3(Input.mousePosition.x/Screen.width, Input.mousePosition.y/Screen.height, 0);
+		camrot = new Vector4(0, 170, 0, 170);
 
 		for(int y = 0; y < d[0].height; y++)
 		for(int x = 0; x < d[0].width; x++)
@@ -27,14 +30,13 @@ public class bulletroll : MonoBehaviour
 
 	void Update()
 	{
-		const int sensitivity = 90;
-		Vector2 mousepos = new Vector3(Input.mousePosition.x/Screen.width*sensitivity, Input.mousePosition.y/Screen.height*sensitivity, 0);
+		const int sensitivity = 120;
+		Vector2 mousepos = new Vector3(Input.mousePosition.x/Screen.width*sensitivity, Input.mousePosition.y/Screen.height*sensitivity*1.4f, 0);
 		if(Input.GetMouseButton(0))
 		{
 			mouse.sprite = mice[1];
-			pan = Mathf.Clamp(pan + prevrot.y - mousepos.y, -90, 90);
-			t[0].localEulerAngles = new Vector3(pan, 0, 0);
-			t[1].Rotate(0, mousepos.x - prevrot.x, 0, Space.Self);
+			camrot.x = Mathf.Clamp(camrot.x + prevrot.y - mousepos.y, -90, 90);
+			camrot.y =             camrot.y + mousepos.x - prevrot.x;
 		}
 		else if(Input.GetMouseButton(1))
 		{
@@ -66,5 +68,9 @@ public class bulletroll : MonoBehaviour
 		}
 		else mouse.sprite = mice[0];
 		prevrot = mousepos;
+		camrot.z = Mathf.Lerp(camrot.z, camrot.x, Time.deltaTime*8);
+		camrot.w = Mathf.Lerp(camrot.w, camrot.y, Time.deltaTime*8);
+		t[0].localEulerAngles = new Vector3(camrot.z * influence, 0, 0);
+		t[1].localEulerAngles = new Vector3(0, (Mathf.Repeat(camrot.w, 360) - 180) * influence + 180, 0);
 	}
 }
