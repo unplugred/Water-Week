@@ -12,6 +12,8 @@ public class bulletroll : MonoBehaviour
 	[SerializeField] Image mouse;
 	[SerializeField] Sprite[] mice;
 	[SerializeField] [Range(0.0f, 1.0f)] float influence;
+	[SerializeField] Transform tdms;
+	[SerializeField] Transform hitthething;
 
 	void Start()
 	{
@@ -21,7 +23,7 @@ public class bulletroll : MonoBehaviour
 		for(int y = 0; y < d[0].height; y++)
 		for(int x = 0; x < d[0].width; x++)
 		{
-			d[0].SetPixel(x, y, (y > d[0].height * .75 && x > d[0].width * .6) ? Color.black : Color.white);
+			d[0].SetPixel(x, y, (y > d[0].height * .75 && x > d[0].width * .6) ? Color.clear : Color.black);
 			d[2].SetPixel(x, y, new Color(1, .502f, .502f, .502f));
 		}
 		d[0].Apply();
@@ -32,6 +34,24 @@ public class bulletroll : MonoBehaviour
 	{
 		const int sensitivity = 120;
 		Vector2 mousepos = new Vector3(Input.mousePosition.x/Screen.width*sensitivity, Input.mousePosition.y/Screen.height*sensitivity*1.4f, 0);
+		int bbx = -666, bby = -666;
+		if(prevrot != mousepos)
+		{
+			RaycastHit hit;
+			if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+			{
+				if(hit.transform.gameObject == goodbullet && (hit.textureCoord.x < .6f || hit.textureCoord.y < .75f))
+				{
+					bbx = (int)(hit.textureCoord.x * d[0].width  - d[1].width  * .5f);
+					bby = (int)(hit.textureCoord.y * d[0].height - d[1].height * .5f);
+					tdms.localPosition = hit.point;
+					tdms.rotation = Quaternion.LookRotation(hit.normal);
+				}
+				else tdms.localPosition = new Vector3(666, 666, 666);
+			}
+			else tdms.localPosition = new Vector3(666, 666, 666);
+		}
+
 		if(Input.GetMouseButton(0))
 		{
 			mouse.sprite = mice[1];
@@ -41,29 +61,22 @@ public class bulletroll : MonoBehaviour
 		else if(Input.GetMouseButton(1))
 		{
 			mouse.sprite = mice[2];
-			if(prevrot != mousepos)
+			if(bbx != -666)
 			{
-				RaycastHit hit;
-				if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-				if(hit.transform.gameObject == goodbullet)
+				for(int y = 0; y < d[1].height; y++)
+				for(int x = 0; x < d[1].width; x++)
 				{
-					int bbx = (int)(hit.textureCoord.x * d[0].width - d[1].width * .5f);
-					int bby = (int)(hit.textureCoord.y * d[0].height - d[1].height * .5f);
-					for(int y = 0; y < d[1].height; y++)
-					for(int x = 0; x < d[1].width; x++)
+					int currentx = (bbx + x) % d[0].width;
+					int currenty = (bby + y) % d[0].height;
+					Color currentc = d[1].GetPixel(x, y);
+					if(d[0].GetPixel(currentx, currenty).a > currentc.a)
 					{
-						int currentx = (bbx + x) % d[0].width;
-						int currenty = (bby + y) % d[0].height;
-						Color currentc = d[1].GetPixel(x, y);
-						if(d[0].GetPixel(currentx, currenty).r > currentc.r)
-						{
-							d[0].SetPixel(currentx, currenty, currentc);
-							d[2].SetPixel(currentx, currenty, d[3].GetPixel(x,y));
-						}
+						d[0].SetPixel(currentx, currenty, currentc);
+						d[2].SetPixel(currentx, currenty, d[3].GetPixel(x,y));
 					}
-					d[0].Apply();
-					d[2].Apply();
 				}
+				d[0].Apply();
+				d[2].Apply();
 			}
 		}
 		else mouse.sprite = mice[0];
