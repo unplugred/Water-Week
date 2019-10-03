@@ -16,12 +16,13 @@
 		struct Input
 		{
 			float3 viewDir;
+			float4 color : COLOR;
 		};
 
 		fixed4 _c;
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o)
 		{
-			o.Albedo = _c.rgb;
+			o.Albedo = _c.rgb * IN.color;
 			o.Specular = fixed3(.006, .0399, .0938);
 			o.Smoothness = .38;
 			o.Emission = fixed3(.0385, .041, .2427)*pow(1 - saturate(dot(normalize(IN.viewDir),o.Normal)), 2.02);

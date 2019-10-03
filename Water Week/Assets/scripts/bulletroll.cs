@@ -31,6 +31,10 @@ public class bulletroll : MonoBehaviour
 	float ocmstart = 1;
 	[SerializeField] AnimationCurve uicruve;
 	Vector2[] startpos = new Vector2[3];
+	[SerializeField] AnimationCurve shakecurve;
+	float shakeprogress = 1;
+	int overolparticol;
+	[SerializeField] ParticleSystem shakeyshakey;
 
 	void Start()
 	{
@@ -49,6 +53,7 @@ public class bulletroll : MonoBehaviour
 		const int sensitivity = 120;
 		int bbx = -666, bby = -666;
 		bool tippp = false;
+		float shake = 0;
 		if(influence == 1)
 		{
 			int particol = 0;
@@ -70,7 +75,18 @@ public class bulletroll : MonoBehaviour
 			else if(mp.checkreigon(.255f, .03f, .36f, .16f))
 			{
 				uis[1].sprite = sprites[3];
-				if(Input.GetMouseButtonUp(0)) clear();
+				if(Input.GetMouseButtonUp(0))
+				{
+					if(shakeprogress > .5) shakeprogress = 1 - Mathf.Min(shakeprogress, 1);
+					if(shakeprogress == 0)
+					{
+						shakeyshakey.Play();
+						var emm = shakeyshakey.emission;
+						emm.rateOverTimeMultiplier = overolparticol*.0025f;
+						overolparticol = 0;
+					}
+					ocstart = false;
+				}
 				if(Input.GetMouseButton(0)) uis[2].sprite = sprites[8];
 				else uis[2].sprite = sprites[7];
 			}
@@ -103,7 +119,7 @@ public class bulletroll : MonoBehaviour
 					camrot.x = Mathf.Clamp(camrot.x + prevrot.y - mousepos.y, -90, 90);
 					camrot.y =             camrot.y + mousepos.x - prevrot.x;
 				}
-				if(Input.GetMouseButton(0))
+				if(Input.GetMouseButton(0) && shakeprogress == 1)
 				{
 					uis[0].sprite = sprites[1];
 					if(bbx != -666)
@@ -128,9 +144,24 @@ public class bulletroll : MonoBehaviour
 					tippp = closenthetip;
 				}
 			}
+			if(shakeprogress < 1)
+			{
+				if((shakeprogress += Time.deltaTime*1.3f) > 1)
+				{
+					shakeprogress = 1;
+					clear();
+					mat.SetFloat("_s", 1);
+				}
+				else
+				{
+					mat.SetFloat("_s", 1 - shakeprogress);
+				}
+				shake = shakecurve.Evaluate(shakeprogress);
+			}
 			prevrot = mousepos;
 			var em = particleseverywhere.emission;
-			em.rateOverDistanceMultiplier = particol/6f;
+			em.rateOverDistanceMultiplier = particol*.1f;
+			overolparticol += particol;
 		}
 		ocuim = Mathf.Clamp01(ocuim + Time.deltaTime*(ocui ? -2 : 2));
 		float amnt = uicruve.Evaluate(ocuim);
@@ -138,13 +169,13 @@ public class bulletroll : MonoBehaviour
 		uis[2].transform.localPosition = startpos[2] + new Vector2(0, amnt*-33);
 		ocmstart = Mathf.Clamp01(ocmstart + Time.deltaTime*(ocstart ? -2 : 2));
 		uis[1].transform.localPosition = startpos[1] + new Vector2(0, uicruve.Evaluate(ocmstart)*-33);
-		tdms.position = Vector3.Lerp(tdms.position, tdmsmodel.position, Time.deltaTime * (tippp ? 20 : 10));
-		tdms.rotation = Quaternion.Slerp(tdms.rotation, tdmsmodel.rotation, Time.deltaTime * (tippp ? 10 : 5));
+		tdms.position = Vector3.Lerp(tdms.position, tdmsmodel.position, Time.deltaTime*(tippp ? 20 : 10));
+		tdms.rotation = Quaternion.Slerp(tdms.rotation, tdmsmodel.rotation, Time.deltaTime*(tippp ? 10 : 5));
 		camrot.z = Mathf.Lerp(camrot.z, camrot.x, Time.deltaTime*8);
 		camrot.w = Mathf.Lerp(camrot.w, camrot.y, Time.deltaTime*8);
-		t[0].localEulerAngles = new Vector3(camrot.z * influence, 0, 0);
-		t[1].localEulerAngles = new Vector3(0, (Mathf.Repeat(camrot.w + 180, 360) - 180) * influence, 0);
-		hitthething.localPosition = hitthething.localPosition * (1 - influence) + new Vector3(0, 0, Mathf.Clamp(hitthething.localPosition.z + Time.deltaTime * (tippp ? -1 : 1), 0, .15f + (1 - influence) * 800));
+		t[0].localEulerAngles = new Vector3(camrot.z * influence + Mathf.Sin(Time.time*20)*shake, 0, 0);
+		t[1].localEulerAngles = new Vector3(0, (Mathf.Repeat(camrot.w + 180, 360) - 180)*influence + Mathf.Cos(Time.time*20)*shake, 0);
+		hitthething.localPosition = hitthething.localPosition*(1 - influence) + new Vector3(0, 0, Mathf.Clamp(hitthething.localPosition.z + Time.deltaTime*(tippp ? -1 : 1), 0, .15f + (1 - influence)*800));
 	}
 
 	public void clear()
@@ -153,11 +184,10 @@ public class bulletroll : MonoBehaviour
 		for(int y = 0; y < dd[0].height; y++)
 		for(int x = 0; x < dd[0].width; x++)
 		{
-			dd[0].SetPixel(x, y, (y > dd[0].height * .75 && x > dd[0].width * .6) ? Color.clear : Color.black);
+			dd[0].SetPixel(x, y, Color.black);
 			dd[1].SetPixel(x, y, n);
 		}
 		dd[0].Apply();
 		dd[1].Apply();
-		ocstart = false;
 	}
 }
