@@ -54,7 +54,7 @@ public class bulletroll : MonoBehaviour
 			int particol = 0;
 			uis[0].sprite = sprites[0];
 			Vector2 mousepos = new Vector2(mp.mp.x*sensitivity, mp.mp.y*sensitivity*1.4f);
-			if(mp.checkreigon(.035f, .035f, .24f, .155f))
+			if(ocstart && mp.checkreigon(.035f, .035f, .24f, .155f))
 			{
 				uis[2].sprite = sprites[6];
 				if(Input.GetMouseButtonUp(0))
@@ -78,7 +78,7 @@ public class bulletroll : MonoBehaviour
 			{
 				uis[1].sprite = sprites[3];
 				uis[2].sprite = sprites[6];
-				if(prevrot != mousepos)
+				if(prevrot != mousepos || Input.GetMouseButtonDown(0))
 				{
 					RaycastHit hit;
 					if(Physics.Raycast(Camera.main.ScreenPointToRay(mp.mp*200), out hit))
