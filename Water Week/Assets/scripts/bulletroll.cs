@@ -21,13 +21,16 @@ public class bulletroll : MonoBehaviour
 	[SerializeField] Material mat;
 	[SerializeField] mouseinput mp;
 	[SerializeField] PlayableDirector timeline;
+	[SerializeField] Text nametag;
 	Vector3 tdmspos;
 	Quaternion tdmsrot;
 	bool closenthetip;
 	public bool ocui = false;
 	float ocuim = 1;
+	bool ocstart = false;
+	float ocmstart = 1;
 	[SerializeField] AnimationCurve uicruve;
-	Vector2[] startpos = new Vector2[2];
+	Vector2[] startpos = new Vector2[3];
 
 	void Start()
 	{
@@ -38,6 +41,7 @@ public class bulletroll : MonoBehaviour
 		mat.SetTexture("_n", dd[1]);
 		startpos[0] = uis[0].transform.localPosition;
 		startpos[1] = uis[1].transform.localPosition;
+		startpos[2] = uis[2].transform.localPosition;
 	}
 
 	void Update()
@@ -58,6 +62,7 @@ public class bulletroll : MonoBehaviour
 					timeline.Play();
 					mp.cursora = false;
 					ocui = false;
+					nametag.gameObject.SetActive(false);
 				}
 				if(Input.GetMouseButton(0)) uis[1].sprite = sprites[5];
 				else uis[1].sprite = sprites[4];
@@ -92,15 +97,15 @@ public class bulletroll : MonoBehaviour
 				}
 				mp.cursora = !closenthetip;
 
-				if(Input.GetMouseButton(0))
-				{
-					uis[0].sprite = sprites[1];
-					camrot.x = Mathf.Clamp(camrot.x + prevrot.y - mousepos.y, -90, 90);
-					camrot.y =             camrot.y + mousepos.x - prevrot.x;
-				}
 				if(Input.GetMouseButton(1))
 				{
 					uis[0].sprite = sprites[2];
+					camrot.x = Mathf.Clamp(camrot.x + prevrot.y - mousepos.y, -90, 90);
+					camrot.y =             camrot.y + mousepos.x - prevrot.x;
+				}
+				if(Input.GetMouseButton(0))
+				{
+					uis[0].sprite = sprites[1];
 					if(bbx != -666)
 					{
 						for(int y = 0; y < d[0].height; y++)
@@ -118,6 +123,7 @@ public class bulletroll : MonoBehaviour
 						}
 						dd[0].Apply();
 						dd[1].Apply();
+						ocstart = true;
 					}
 					tippp = closenthetip;
 				}
@@ -127,12 +133,11 @@ public class bulletroll : MonoBehaviour
 			em.rateOverDistanceMultiplier = particol/6f;
 		}
 		ocuim = Mathf.Clamp01(ocuim + Time.deltaTime*(ocui ? -2 : 2));
-		if(ocuim != 0 && ocuim != 1)
-		{
-			float amnt = uicruve.Evaluate(ocuim);
-			uis[0].transform.localPosition = startpos[0] + new Vector2(0, amnt*44);
-			uis[1].transform.localPosition = startpos[1] + new Vector2(0, amnt*-33);
-		}
+		float amnt = uicruve.Evaluate(ocuim);
+		uis[0].transform.localPosition = startpos[0] + new Vector2(0, amnt*44);
+		uis[2].transform.localPosition = startpos[2] + new Vector2(0, amnt*-33);
+		ocmstart = Mathf.Clamp01(ocmstart + Time.deltaTime*(ocstart ? -2 : 2));
+		uis[1].transform.localPosition = startpos[1] + new Vector2(0, uicruve.Evaluate(ocmstart)*-33);
 		tdms.position = Vector3.Lerp(tdms.position, tdmsmodel.position, Time.deltaTime * (tippp ? 20 : 10));
 		tdms.rotation = Quaternion.Slerp(tdms.rotation, tdmsmodel.rotation, Time.deltaTime * (tippp ? 10 : 5));
 		camrot.z = Mathf.Lerp(camrot.z, camrot.x, Time.deltaTime*8);
@@ -153,5 +158,6 @@ public class bulletroll : MonoBehaviour
 		}
 		dd[0].Apply();
 		dd[1].Apply();
+		ocstart = false;
 	}
 }
