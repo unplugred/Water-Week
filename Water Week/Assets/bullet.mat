@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: bullet
-  m_Shader: {fileID: -6465566751694194690, guid: 96880b7e87df28842a1edf98af1e1a8e,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 789c1a4916ae73a4fb7a82f98ff48dd9, type: 3}
   m_ShaderKeywords: _NORMALMAP _RECEIVE_SHADOWS_OFF _SPECULAR_SETUP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -58,14 +57,22 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_1535F865_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 5715c5ac70914904687e862d859364d6, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_19CE53FF_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 4d8d6a903e23b0e4890ac9c9540b1564, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _c:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _n:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -100,3 +107,4 @@ Material:
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999817, g: 0.19999817, b: 0.19999817, a: 0.511}
+    - _c: {r: 1, g: 1, b: 1, a: 1}
