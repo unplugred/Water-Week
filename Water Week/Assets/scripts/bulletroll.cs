@@ -35,6 +35,9 @@ public class bulletroll : MonoBehaviour
 	float shakeprogress = 1;
 	int overolparticol;
 	[SerializeField] ParticleSystem shakeyshakey;
+	[SerializeField] GameObject gameui;
+	[SerializeField] AnimationCurve camcurve;
+	float camprogress = 0;
 
 	void Start()
 	{
@@ -46,6 +49,10 @@ public class bulletroll : MonoBehaviour
 		startpos[0] = uis[0].transform.localPosition;
 		startpos[1] = uis[1].transform.localPosition;
 		startpos[2] = uis[2].transform.localPosition;
+		uis[0].transform.localPosition = startpos[0] + new Vector2(0, 44);
+		uis[2].transform.localPosition = startpos[2] + new Vector2(0, -33);
+		uis[1].transform.localPosition = startpos[1] + new Vector2(0, -33);
+		gameui.SetActive(true);
 	}
 
 	void Update()
@@ -67,7 +74,6 @@ public class bulletroll : MonoBehaviour
 					timeline.Play();
 					mp.cursora = false;
 					ocui = false;
-					nametag.gameObject.SetActive(false);
 				}
 				if(Input.GetMouseButton(0)) uis[1].sprite = sprites[5];
 				else uis[1].sprite = sprites[4];
@@ -119,7 +125,7 @@ public class bulletroll : MonoBehaviour
 					camrot.x = Mathf.Clamp(camrot.x + prevrot.y - mousepos.y, -90, 90);
 					camrot.y =             camrot.y + mousepos.x - prevrot.x;
 				}
-				if(Input.GetMouseButton(0) && shakeprogress == 1)
+				if(Input.GetMouseButton(0) && shakeprogress == 1 && ocuim == 0)
 				{
 					uis[0].sprite = sprites[1];
 					if(bbx != -666)
@@ -162,6 +168,12 @@ public class bulletroll : MonoBehaviour
 			var em = particleseverywhere.emission;
 			em.rateOverDistanceMultiplier = particol*.1f;
 			overolparticol += particol;
+			if(camprogress < 1)
+			{
+				camprogress = Mathf.Min(camprogress += Time.deltaTime*.5f, 1);
+				Camera.main.transform.position = new Vector3(0,-1.9f*(1 - camcurve.Evaluate(camprogress)),2);
+				ocui = camprogress >= 1;
+			}
 		}
 		ocuim = Mathf.Clamp01(ocuim + Time.deltaTime*(ocui ? -2 : 2));
 		float amnt = uicruve.Evaluate(ocuim);
@@ -169,6 +181,7 @@ public class bulletroll : MonoBehaviour
 		uis[2].transform.localPosition = startpos[2] + new Vector2(0, amnt*-33);
 		ocmstart = Mathf.Clamp01(ocmstart + Time.deltaTime*(ocstart ? -2 : 2));
 		uis[1].transform.localPosition = startpos[1] + new Vector2(0, uicruve.Evaluate(ocmstart)*-33);
+		nametag.color = new Color(0,0,0,Mathf.Clamp(nametag.color.a + Time.deltaTime*(ocui ? 5 : -5),0,.95f));
 		tdms.position = Vector3.Lerp(tdms.position, tdmsmodel.position, Time.deltaTime*(tippp ? 20 : 10));
 		tdms.rotation = Quaternion.Slerp(tdms.rotation, tdmsmodel.rotation, Time.deltaTime*(tippp ? 10 : 5));
 		camrot.z = Mathf.Lerp(camrot.z, camrot.x, Time.deltaTime*8);
