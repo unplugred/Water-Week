@@ -3,9 +3,16 @@ using UnityEngine.UI;
 
 public class mouseinput : MonoBehaviour
 {
+	public static mouseinput m;
 	public Vector2 mp;
 	[SerializeField] Image cursor;
 	public bool cursora;
+	public AnimationCurve uicurve;
+
+	void Start()
+	{
+		m = this;
+	}
 
 	void Update()
 	{
@@ -18,8 +25,18 @@ public class mouseinput : MonoBehaviour
 		cursor.color = new Color(1,1,1,Mathf.Clamp01(cursor.color.a + (cursora ? 10 : -10)*Time.deltaTime));
 	}
 
+	public bool checkreigon(Vector4 pos)
+	{
+		return !(mp.x < pos.x || mp.y < pos.y || mp.x > pos.z || mp.y > pos.w);
+	}
+
 	public bool checkreigon(float x, float y, float z, float w)
 	{
 		return !(mp.x < x || mp.y < y || mp.x > z || mp.y > w);
+	}
+
+	public void setcursor(bool curs)
+	{
+		cursora = curs;
 	}
 }
