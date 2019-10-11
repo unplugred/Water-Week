@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class titlescreen : MonoBehaviour
 {
-	[SerializeField] bttn start;
+	[SerializeField] mov start;
 	[SerializeField] Transform title;
 	[SerializeField] GameObject namingscreen;
 	[SerializeField] AnimationCurve scalex;
@@ -22,11 +22,11 @@ public class titlescreen : MonoBehaviour
 	{
 		if((ideal && progress < 1) || (!ideal && progress > 0))
 		{
-			progress += Time.deltaTime * (ideal ? 1.5f : -1.5f);
+			progress += Time.deltaTime * (ideal ? .8f : -.8f);
 			if(progress >= 1 && ideal)
 			{
 				progress = 1;
-				start.ison = true;
+				start.setui(true);
 			}
 			else if(progress <= 0 && !ideal)
 			{
