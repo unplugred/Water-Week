@@ -75,9 +75,7 @@ public class namescreen : MonoBehaviour
 		tim = Mathf.Clamp(tim + Time.deltaTime * (onoff ? 1 : -1), 0, 1.5f);
 		notim += Time.deltaTime*1.5f;
 		for(int i = 0; i < keysss.Length; i++)
-		{
-			keysss[i].transform.localPosition = initpos[i+1] + new Vector2(0, keynimation.Evaluate(tim*1.2f - i*.1f + (i - i%6)*.08f)*140 - ((input == i && Input.GetMouseButton(0)) ? 1 : 0));
-		}
+			keysss[i].transform.localPosition = initpos[i+1] + new Vector2(0, keynimation.Evaluate(tim*1.2f - i*.1f + (i - i%6)*.08f)*140 - ((input == i && (Input.GetMouseButton(0) || keyboard)) ? 1 : 0));
 		field.localPosition = initpos[0] + new Vector2(nono.Evaluate(notim)*5, (1 - fieldanim.Evaluate((tim - .3f)*1.1f))*60);
 		if(tim == 0 && !onoff)
 		{
@@ -91,11 +89,8 @@ public class namescreen : MonoBehaviour
 		switch(ch)
 		{
 			case '\b':
-				if(txtt.text == "")
-				{
-					if(notim >= 1) notim = 0;
-				}
-				else txtt.text = txtt.text.Substring(0, txtt.text.Length - 1);
+				if(txtt.text != "") txtt.text = txtt.text.Substring(0, txtt.text.Length - 1);
+				else if(notim >= 1) notim = 0;
 				break;
 			case '\n':
 				if(txtt.text.Length > 0)
@@ -104,20 +99,18 @@ public class namescreen : MonoBehaviour
 					onoff = false;
 					finaltext.text = txtt.text.ToUpper() + "'s bullet";
 				}
+				else if(notim >= 1) notim = 0;
 				break;
 			case ' ':
-				if(txtt.text.Length >= 11)
+				if(txtt.text.Length < 11)
 				{
-					if(notim >= 1) notim = 0;
+					if(txtt.text != "" && !txtt.text.EndsWith(" ")) txtt.text += " ";
 				}
-				else if(txtt.text != "" && !txtt.text.EndsWith(" ")) txtt.text += " ";
+				else if(notim >= 1) notim = 0;
 				break;
 			default:
-				if(txtt.text.Length >= 11)
-				{
-					if(notim >= 1) notim = 0;
-				}
-				else txtt.text += ch;
+				if(txtt.text.Length < 11) txtt.text += ch;
+				else if(notim >= 1) notim = 0;
 				break;
 		}
 	}

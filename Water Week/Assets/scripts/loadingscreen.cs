@@ -10,7 +10,7 @@ public class loadingscreen : MonoBehaviour
 
 	void Update()
 	{
-		txt.color = new Color(0,0,0, Mathf.Clamp01((Mathf.Cos(tim += Time.deltaTime*3)*-0.9f) + .3f));
+		txt.color = new Color(0,0,0, Mathf.Clamp01((Mathf.Cos(tim += Time.deltaTime*3)*-.9f) + .3f));
 		if(tim >= time*Mathf.PI*2)
 		{
 			nextscreen.SetActive(true);
