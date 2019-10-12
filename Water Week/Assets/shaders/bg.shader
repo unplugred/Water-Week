@@ -46,6 +46,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed map = tex2D(_MainTex, i.uv).a*.14;
+				map = .14;
 				float2 uv = floor((((1 - map)*i.uv + map *.5)*10 + _Time[1]*.2)%2);
 				return saturate((uv.x + uv.y)%2 + fixed4(1,.6053,1,1));
 			}
