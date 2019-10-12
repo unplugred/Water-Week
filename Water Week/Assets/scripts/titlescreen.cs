@@ -6,7 +6,7 @@ public class titlescreen : MonoBehaviour
 {
 	[SerializeField] mov start;
 	[SerializeField] Transform title;
-	[SerializeField] GameObject namingscreen;
+	[SerializeField] GameObject nextscreen;
 	[SerializeField] AnimationCurve scalex;
 	[SerializeField] AnimationCurve scaley;
 	float progress = 0;
@@ -31,7 +31,7 @@ public class titlescreen : MonoBehaviour
 			else if(progress <= 0 && !ideal)
 			{
 				progress = 0;
-				namingscreen.SetActive(true);
+				nextscreen.SetActive(true);
 				gameObject.SetActive(false);
 			}
 			title.localScale = new Vector3(scalex.Evaluate(progress), scaley.Evaluate(progress), 1);
