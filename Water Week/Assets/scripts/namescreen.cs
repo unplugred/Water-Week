@@ -11,6 +11,7 @@ public class namescreen : MonoBehaviour
 	[SerializeField] Sprite[] keypresses;
 	[SerializeField] AnimationCurve nono;
 	[SerializeField] GameObject actualgame;
+	[SerializeField] Text finaltext;
 	float tim;
 	Vector2[] initpos;
 	int inty;
@@ -60,6 +61,7 @@ public class namescreen : MonoBehaviour
 					{
 						if(txtt.text.EndsWith(" ")) txtt.text = txtt.text.Substring(0,txtt.text.Length - 1);
 						onoff = false;
+						finaltext.text = txtt.text.ToUpper() + "'s bullet";
 					}
 					break;
 				case ' ':

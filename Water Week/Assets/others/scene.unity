@@ -7600,6 +7600,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   actualgame: {fileID: 1670377493}
+  finaltext: {fileID: 1999185170}
 --- !u!1001 &1042442531
 PrefabInstance:
   m_ObjectHideFlags: 0
