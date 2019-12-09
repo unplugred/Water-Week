@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ppl : MonoBehaviour
 {
@@ -25,7 +26,9 @@ public class ppl : MonoBehaviour
 				pppp.Add(Instantiate(prsn2, new Vector3(read,-2.88f,-5), Quaternion.Euler(0,90,0), transform));
 			else
 				pppp.Add(Instantiate(prsn, new Vector3(read,-2.88f,-5), Quaternion.Euler(0,90,0), transform));
-			pppp[pppp.Count - 1].GetComponent<Animator>().speed = Random.Range(.8f, 1.2f);
+			Animator anim = pppp[pppp.Count - 1].GetComponent<Animator>();
+			anim.speed = Random.Range(.8f, 1.2f);
+			anim.SetFloat("offset",Random.Range(0f,1f));
 			read += much;
 		}
 		foreach(Image img in treethingies)
@@ -54,5 +57,10 @@ public class ppl : MonoBehaviour
 			foreach(Image img in treethingies)
 				img.transform.localPosition = new Vector3(Mathf.Round(img.transform.localPosition.x),-1,70);
 		}
+	}
+
+	public void Restart()
+	{
+		SceneManager.LoadScene(0);
 	}
 }

@@ -72,7 +72,7 @@ Material:
     - BandingWidth: 10
     - ColorBlur: 0.0006
     - DistAmount: 0.0111
-    - DistInvert: 1
+    - DistInvert: -1
     - HorizontalBlur: 0.001
     - SLAmount: 0.024
     - _BumpScale: 1
