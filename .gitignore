@@ -1,8 +1,6 @@
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
-[Bb]uild/
-[Bb]uilds/
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
@@ -39,3 +37,9 @@ sysinfo.txt
 # Windows Garbage
 Thumbs.db
 Thumbs.db.meta
+
+# Sublime Garbage
+*.sublime-project
+*.sublime-workspace
+
+*.blend1
