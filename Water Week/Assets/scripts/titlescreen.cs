@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class titlescreen : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class titlescreen : MonoBehaviour
 	void OnEnable()
 	{
 		ideal = true;
-		progress = 0;
+		progress = -.5f;
 	}
 
 	void Update()
@@ -40,6 +38,6 @@ public class titlescreen : MonoBehaviour
 
 	public void flip()
 	{
-		ideal = !ideal;
+		if(ideal && progress >= 1) ideal = false;
 	}
 }

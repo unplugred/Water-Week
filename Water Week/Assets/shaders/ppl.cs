@@ -14,6 +14,7 @@ public class ppl : MonoBehaviour
 	const float min = 1;
 	const float max = 2;
 	const float width = 5;
+	float restarttimer = -1;
 	int lastsecond;
 
 	void Start()
@@ -57,10 +58,16 @@ public class ppl : MonoBehaviour
 			foreach(Image img in treethingies)
 				img.transform.localPosition = new Vector3(Mathf.Round(img.transform.localPosition.x),-1,70);
 		}
+
+		if(restarttimer >= 0)
+		{
+			restarttimer -= Time.deltaTime*3;
+			if(restarttimer <= 0) SceneManager.LoadScene(0);
+		}
 	}
 
 	public void Restart()
 	{
-		SceneManager.LoadScene(0);
+		restarttimer = 1;
 	}
 }
