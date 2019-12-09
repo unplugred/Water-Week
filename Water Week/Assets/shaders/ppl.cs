@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ppl : MonoBehaviour
 {
@@ -10,7 +8,7 @@ public class ppl : MonoBehaviour
 	[SerializeField] GameObject treemaster;
 	[SerializeField] Sprite[] treesss;
 	[SerializeField] Image[] treethingies;
-	List<GameObject> pppp = new List<GameObject>();
+	System.Collections.Generic.List<GameObject> pppp = new System.Collections.Generic.List<GameObject>();
 	const float min = 1;
 	const float max = 2;
 	const float width = 5;
@@ -62,7 +60,7 @@ public class ppl : MonoBehaviour
 		if(restarttimer >= 0)
 		{
 			restarttimer -= Time.deltaTime*3;
-			if(restarttimer <= 0) SceneManager.LoadScene(0);
+			if(restarttimer <= 0) UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 		}
 	}
 
