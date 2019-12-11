@@ -5,7 +5,7 @@ public class mov : MonoBehaviour
 	[SerializeField] Vector2 movee;
 	public bttn button;
 	[SerializeField] bool ison;
-	float progress = 1;
+	public float progress = 1;
 	Vector2 startpos;
 
 	void Start()

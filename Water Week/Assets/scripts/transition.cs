@@ -8,6 +8,8 @@ public class transition : MonoBehaviour
 	[SerializeField] AnimationCurve horizontalshake;
 	[SerializeField] AnimationCurve verticaljump;
 	[SerializeField] AnimationCurve digitalglitch;
+	float adtime;
+	[SerializeField] AudioSource sauce;
 	public static float tim = 5;
 
 	void OnEnable()
@@ -28,7 +30,19 @@ public class transition : MonoBehaviour
 			ag.horizontalShake = horizontalshake.Evaluate(val)*.6f;
 			ag.verticalJump = verticaljump.Evaluate(val)*.9f;
 			dg.intensity = digitalglitch.Evaluate(val)*.95f;
+			adtime -= Time.deltaTime;
+			if(adtime < 0)
+			{
+				adtime = Random.Range(.0f,.1f);
+				sauce.mute = !sauce.mute;
+				sauce.pitch = Random.Range(.8f,1.2f);
+				sauce.panStereo = Random.Range(-.3f,.3f);
+			}
 		}
-		else enabled = false;
+		else
+		{
+			sauce.mute = true;
+			enabled = false;
+		}
 	}
 }

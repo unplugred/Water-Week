@@ -7,6 +7,8 @@ public class titlescreen : MonoBehaviour
 	[SerializeField] GameObject nextscreen;
 	[SerializeField] AnimationCurve scalex;
 	[SerializeField] AnimationCurve scaley;
+	[SerializeField] AudioSource sauce;
+	[SerializeField] AudioClip pancake;
 	float progress = 0;
 	bool ideal = true;
 
@@ -20,13 +22,18 @@ public class titlescreen : MonoBehaviour
 	{
 		if((ideal && progress < 1) || (!ideal && progress > 0))
 		{
+			bool beforetime = progress <= 0;
 			progress += Time.deltaTime * (ideal ? .8f : -.8f);
-			if(progress >= 1 && ideal)
+			if(ideal)
 			{
-				progress = 1;
-				start.setui(true);
+				if(beforetime != progress <= 0) sauce.PlayDelayed(.05f);
+				if(progress >= 1)
+				{
+					progress = 1;
+					start.setui(true);
+				}
 			}
-			else if(progress <= 0 && !ideal)
+			else if(progress <= 0)
 			{
 				progress = 0;
 				nextscreen.SetActive(true);
@@ -38,6 +45,9 @@ public class titlescreen : MonoBehaviour
 
 	public void flip()
 	{
-		if(ideal && progress >= 1) ideal = false;
+		if(!ideal || progress < 1) return;
+		ideal = false;
+		sauce.clip = pancake;
+		sauce.PlayDelayed(.1f);
 	}
 }

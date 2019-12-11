@@ -12,6 +12,8 @@ public class namescreen : MonoBehaviour
 	[SerializeField] AnimationCurve nono;
 	[SerializeField] GameObject actualgame;
 	[SerializeField] Text finaltext;
+	[SerializeField] AudioSource sauce;
+	[SerializeField] AudioClip[] pancake;
 	float tim;
 	Vector2[] initpos;
 	int inty;
@@ -88,30 +90,66 @@ public class namescreen : MonoBehaviour
 	{
 		switch(ch)
 		{
+			//delete letter
 			case '\b':
-				if(txtt.text != "") txtt.text = txtt.text.Substring(0, txtt.text.Length - 1);
-				else if(notim >= 1) notim = 0;
+				if(txtt.text != "")
+				{
+					txtt.text = txtt.text.Substring(0, txtt.text.Length - 1);
+					sauce.pitch = Random.Range(.73f, 0.77f);
+					sauce.panStereo = Random.Range(-.2f,.2f);
+					sauce.clip = pancake[0];
+					sauce.Play();
+				}
+				else angry();
 				break;
+			//next screen
 			case '\n':
 				if(txtt.text.Length > 0)
 				{
 					if(txtt.text.EndsWith(" ")) txtt.text = txtt.text.Substring(0,txtt.text.Length - 1);
 					onoff = false;
 					finaltext.text = txtt.text.ToUpper() + "'s bullet";
+					sauce.pitch = 1;
+					sauce.panStereo = 0;
+					sauce.clip = pancake[2];
+					sauce.Play();
 				}
-				else if(notim >= 1) notim = 0;
+				else angry();
 				break;
+			//space
 			case ' ':
 				if(txtt.text.Length < 11)
 				{
 					if(txtt.text != "" && !txtt.text.EndsWith(" ")) txtt.text += " ";
+					sauce.pitch = Random.Range(.98f, 1.02f);
+					sauce.panStereo = Random.Range(-.2f,.2f);
+					sauce.clip = pancake[0];
+					sauce.Play();
 				}
-				else if(notim >= 1) notim = 0;
+				else angry();
 				break;
+			//any letter
 			default:
-				if(txtt.text.Length < 11) txtt.text += ch;
-				else if(notim >= 1) notim = 0;
+				if(txtt.text.Length < 11)
+				{
+					txtt.text += ch;
+					sauce.pitch = Random.Range(.98f, 1.02f);
+					sauce.panStereo = Random.Range(-.2f,.2f);
+					sauce.clip = pancake[0];
+					sauce.Play();
+				}
+				else angry();
 				break;
 		}
+	}
+
+	void angry()
+	{
+		if(notim < 1) return;
+		notim = 0;
+		sauce.pitch = Random.Range(.98f, 1.02f);
+		sauce.panStereo = Random.Range(-.2f,.2f);
+		sauce.clip = pancake[1];
+		sauce.Play();
 	}
 }

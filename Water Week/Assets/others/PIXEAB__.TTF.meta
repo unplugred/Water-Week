@@ -4,16 +4,15 @@ TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
   fontSize: 8
-  forceTextureCase: -2
+  forceTextureCase: 3
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Pixel Arial 11
   fontNames:
   - Pixel Arial 11
   fallbackFontReferences:
   - {fileID: 12800000, guid: 3532e5eba664d9b4a91763d6184242ba, type: 3}
-  customCharacters: 
+  customCharacters: abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.'
   fontRenderingMode: 2
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0

@@ -33,6 +33,9 @@ public class bulletroll : MonoBehaviour
 	[SerializeField] Transform gameui;
 	[SerializeField] AnimationCurve camcurve;
 	float camprogress = 0;
+	[SerializeField] AudioSource clipclap;
+	[SerializeField] AudioClip[] clips;
+	float soundtimer;
 
 	void Start()
 	{
@@ -134,6 +137,15 @@ public class bulletroll : MonoBehaviour
 			var em = particleseverywhere.emission;
 			em.rateOverDistanceMultiplier = particol*.1f;
 			overolparticol += particol;
+
+			soundtimer -= Time.deltaTime;
+			if(particol > 100 && soundtimer < 0)
+			{
+				soundtimer = Random.Range(0.02f,.1f);
+				clipclap.panStereo = Random.Range(-.1f,.1f);
+				clipclap.pitch = Random.Range(.8f,1.2f);
+				clipclap.PlayOneShot(clips[Random.Range(0,clips.Length)], Random.Range(.6f,1f));
+			}
 
 			//camera start animation
 			if(camprogress < 1)
