@@ -87,7 +87,7 @@
 				return 0.5 - cos(i*pi)*0.5;
 			}
 
-			fixed4 GetBand(float uv)
+			fixed3 GetBand(float uv)
 			{
 				uv = (uv * 3 + DistInvert + 1) * 10; //counted, its 10
 				return fixed4(bandchannel(uv), bandchannel(uv + 1), bandchannel(uv + 2),0);
@@ -101,11 +101,15 @@
 					return min((1 - uv) * 200 + 0.5, 1);
 			}
 
+			fixed3 lumin(fixed3 n)
+			{
+				return (n.r + n.g + n.b)/3;
+			}
+
 			fixed4 frag (v2f i) : SV_Target
 			{
 				//  >>-------------Squiggle Map Calculation-------------<<
-				float s = (i.uv.y * 100) % 1; // 720/6 = 120
-				float squiggle = (s > 0.5 ? 1 - s : s) - 0.25;
+				float squiggle = (((i.uv.y * 100 + .25) % 1) > 0.5 ? 1 : -1) - 0.25;
 
 				//  >>-------------Fringing-------------<<
 				fixed3 col = blurify(i.uv, _MainTex, HorizontalBlur) * GetEdge(i.uv.x); //expensive but prettier way
@@ -113,11 +117,11 @@
 				float2 pos = i.uv + float2(squiggle * (col.r - col.g) * DistAmount * DistInvert, 0);
 
 				//  >>-------------Color Blur-------------<<
-				fixed horblr = Luminance(blurify(pos, _MainTex, HorizontalBlur).rgb);
+				fixed horblr = lumin(blurify(pos, _MainTex, HorizontalBlur).rgb);
 				fixed3 colblr = blurify(pos, _MainTex, ColorBlur).rgb;
-				colblr = (colblr - Luminance(colblr));
+				colblr = (colblr - lumin(colblr));
 				col = colblr + horblr;
-				
+
 				//  >>-------------Color Banding-------------<<
 				float saturation = abs(colblr.r + colblr.g + colblr.b) * BandingAmount;
 				col = GetBand(i.uv) * saturation + colblr * (1 - BandingAmount) + horblr;
@@ -125,7 +129,7 @@
 				//  >>-------------Scanlines-------------<<
 				if(horblr > 0.5)
 					col = 1 - ((1 - col) * (1 - squiggle * SLAmount));
-				else 
+				else
 					col = col * (1 - squiggle * SLAmount * -1);
 
 				//  >>-------------Thank God We're Done (said the gpu to the motherboard)-------------<<

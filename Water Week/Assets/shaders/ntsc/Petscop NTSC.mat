@@ -70,11 +70,11 @@ Material:
     m_Floats:
     - BandingAmount: 0.005
     - BandingWidth: 10
-    - ColorBlur: 0.0006
-    - DistAmount: 0.0111
+    - ColorBlur: 0.0028
+    - DistAmount: 0.00144
     - DistInvert: -1
-    - HorizontalBlur: 0.001
-    - SLAmount: 0.024
+    - HorizontalBlur: 0.0008
+    - SLAmount: 0.01
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
