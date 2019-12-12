@@ -109,16 +109,18 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				//  >>-------------Squiggle Map Calculation-------------<<
-				float squiggle = (((i.uv.y * 100 + .25) % 1) > 0.5 ? 1 : -1) - 0.25;
+				float ratio = _ScreenParams.y/_ScreenParams.x;
+				float squiggle = (((i.uv.y * 100 * max(ratio,1) + .25) % 1) > 0.5 ? 1 : -1) - 0.25;
 
 				//  >>-------------Fringing-------------<<
-				fixed3 col = blurify(i.uv, _MainTex, HorizontalBlur) * GetEdge(i.uv.x); //expensive but prettier way
+				ratio = min(ratio,1);
+				fixed3 col = blurify(i.uv, _MainTex, HorizontalBlur * ratio) * GetEdge(i.uv.x); //expensive but prettier way
 				//fixed3 col = tex2D(_MainTex, i.uv) * tex2D(MultTex,i.uv) * 2;           //faster but uglier way
-				float2 pos = i.uv + float2(squiggle * (col.r - col.g) * DistAmount * DistInvert, 0);
+				float2 pos = i.uv + float2(squiggle * (col.r - col.g) * DistAmount * DistInvert * ratio, 0);
 
 				//  >>-------------Color Blur-------------<<
-				fixed horblr = lumin(blurify(pos, _MainTex, HorizontalBlur).rgb);
-				fixed3 colblr = blurify(pos, _MainTex, ColorBlur).rgb;
+				fixed horblr = lumin(blurify(pos, _MainTex, HorizontalBlur * ratio).rgb);
+				fixed3 colblr = blurify(pos, _MainTex, ColorBlur * ratio).rgb;
 				colblr = (colblr - lumin(colblr));
 				col = colblr + horblr;
 

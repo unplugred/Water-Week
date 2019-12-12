@@ -72,7 +72,7 @@ Material:
     - BandingWidth: 10
     - ColorBlur: 0.0028
     - DistAmount: 0.00144
-    - DistInvert: -1
+    - DistInvert: 1
     - HorizontalBlur: 0.0008
     - SLAmount: 0.01
     - _BumpScale: 1
@@ -91,6 +91,7 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - aspectmul: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
