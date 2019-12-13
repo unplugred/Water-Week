@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta name="theme-color" content="#FFCCFF">
+		<link rel="icon" type="image/x-icon" href="favicon.ico">
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Water Week</title>
+
+		<style>
+			canvas {
+				position: absolute;
+			}
+
+			#gameContainer {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: none !important;
+			}
+
+			#loading {
+				background-image: url("loading.png");
+				animation-name: loadd;
+				animation-duration: 1s;
+				animation-direction: alternate;
+				width: 218px;
+				height: 42px;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease-in-out;
+				display: none;
+				margin: calc(50vh - 21px) calc(50vw - 106px);
+				position: absolute;
+			}
+
+			@keyframes loadd {
+				0% { opacity: 0; }
+				13% { opacity: 0; }
+				100% { opacity: 1; }
+			}
+
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				overflow: hidden;
+				background-color: black;
+			}
+
+			html {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+			}
+
+			#play {
+				background-image: url("start.png") !important;
+				width: 118px;
+				height: 42px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loading"></div>
+		<div id="gameContainer"><a id="play" class="play" href="javascript:void(0)" onclick="play()"></a></div>
+		<script src="UnityProgress.js"></script>
+		<script src="Build/UnityLoader.js"></script>
+		<script>
+			function play()
+			{
+				document.getElementById("loading").style.display = "block";
+				document.getElementById("play").style.display = "none";
+				var unityInstance = UnityLoader.instantiate("gameContainer", "Build/waterweek.json", {onProgress: UnityProgress});
+			}
+		</script>
+	</body>
+</html>
